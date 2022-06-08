@@ -7,8 +7,14 @@ import (
 type Server struct {
 }
 
-func (s *Server) GetUser(c context.Context, u UserId) (*User, error) {
-	if u.Id == "1" {
+/*
+Estes métodos tem que respeitar a interface que está no user.pb.go
+Então pode copiar o contrato e colar aqui, se quiser, remove o opt.
+Desta maneira, Server está obedecendo o contrato então ele passa a ser do tipo
+necessário para se executar no nosso server.go
+*/
+func (s *Server) GetUser(ctx context.Context, in *UserId) (*User, error) {
+	if in.Id == "1" {
 		return &User{
 			Id:    "1",
 			Name:  "A",
@@ -24,11 +30,11 @@ func (s *Server) GetUser(c context.Context, u UserId) (*User, error) {
 		}, nil
 	}
 
-	return nil, nil
+	return new(User), nil
 }
 
-func (s *Server) IsTokenValid(c context.Context, t Token) (*TokenValidation, error) {
-	if t.Token == "123" {
+func (s *Server) IsTokenValid(ctx context.Context, in *Token) (*TokenValidation, error) {
+	if in.Token == "123" {
 		return &TokenValidation{
 			Status:  true,
 			Message: "Valid",

@@ -1,31 +1,32 @@
 package main
 
 import (
-	"fmt"
-	"log"
-	"net"
-
-	"github.com/j-ew-s/ms-curso-user-api/user"
-	"google.golang.org/grpc"
+	"github.com/buaazp/fasthttprouter"
+	userServices "github.com/j-ew-s/ms-curso-user-api/user-services"
+	"github.com/valyala/fasthttp"
 )
 
 func main() {
+	router := fasthttprouter.New()
+	userServices.SetRoutes(router)
+	fasthttp.ListenAndServe(":5100", CORS(router.Handler))
+}
 
-	lis, err := net.Listen("tcp", ":5001")
+var (
+	corsAllowHeaders     = "*"
+	corsAllowMethods     = "HEAD,GET,POST,PUT,DELETE,OPTIONS"
+	corsAllowOrigin      = "*"
+	corsAllowCredentials = "true"
+)
 
-	if err != nil {
-		log.Fatalf("Erro ao escutar a porta 5001 : %v", err)
+// CORS handles CORS
+func CORS(next fasthttp.RequestHandler) fasthttp.RequestHandler {
+	return func(ctx *fasthttp.RequestCtx) {
+		ctx.Response.Header.Set("Access-Control-Allow-Credentials", corsAllowCredentials)
+		ctx.Response.Header.Set("Access-Control-Allow-Headers", corsAllowHeaders)
+		ctx.Response.Header.Set("Access-Control-Allow-Methods", corsAllowMethods)
+		ctx.Response.Header.Set("Access-Control-Allow-Origin", corsAllowOrigin)
+
+		next(ctx)
 	}
-
-	grpcServer := grpc.NewServer()
-
-	userService := user.Server{}
-
-	user.RegisterUserServiceServer(grpcServer, &userService)
-
-	err = grpcServer.Serve(lis)
-	if err != nil {
-		log.Fatal(fmt.Sprintf("Erro ao levantar o gRPC Server porta 5001 : %v", err))
-	}
-
 }

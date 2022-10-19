@@ -1,7 +1,11 @@
 package main
 
 import (
+	"log"
+
 	"github.com/buaazp/fasthttprouter"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/j-ew-s/ms-curso-user-api/database"
 	userServices "github.com/j-ew-s/ms-curso-user-api/user-services"
 	"github.com/valyala/fasthttp"
 )
@@ -9,6 +13,7 @@ import (
 func main() {
 	router := fasthttprouter.New()
 	userServices.SetRoutes(router)
+	SetDataBase()
 	fasthttp.ListenAndServe(":5100", CORS(router.Handler))
 }
 
@@ -29,4 +34,20 @@ func CORS(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 
 		next(ctx)
 	}
+}
+
+func SetDataBase() {
+
+	conn := database.SetDrivers("mysql", "")
+
+	sqlCommand := &database.SQLCommand{
+		SqlConn: conn,
+	}
+
+	err := sqlCommand.Ping()
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

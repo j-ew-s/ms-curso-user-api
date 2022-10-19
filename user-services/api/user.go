@@ -7,7 +7,7 @@ import (
 )
 
 func Create(ctx *fasthttp.RequestCtx) {
-	fmt.Println("Create")
+
 }
 
 func Update(ctx *fasthttp.RequestCtx) {

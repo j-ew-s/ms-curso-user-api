@@ -1,4 +1,4 @@
-package userservices
+package userServices
 
 import (
 	"github.com/buaazp/fasthttprouter"
@@ -11,6 +11,6 @@ func SetRoutes(router *fasthttprouter.Router) {
 	router.PUT("/:id", api.Update)
 	router.DELETE("/", api.Delete)
 	router.GET("/", api.Detail)
-	router.POST("/", api.Login)
-	router.POST("/", api.Logout)
+	router.POST("/login", api.Login)
+	router.POST("/logout", api.Logout)
 }

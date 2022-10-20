@@ -14,7 +14,10 @@ go mod init github.com/j-ew-s/ms-curso-user-api
 
 
 # Pacotes que utilizamos 
-- SQL : go get -u github.com/go-sql-driver/mysql
+go get -u github.com/go-sql-driver/mysql
+go get -u gorm.io/gorm
+go get -u gorm.io/driver/sqlite
+
 
 
 # DOCKER 

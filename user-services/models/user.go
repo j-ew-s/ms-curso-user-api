@@ -1,5 +1,9 @@
-package userModel
+package Nam
 
 type User struct {
-	int id
+	Id       int    `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	Username string `json:"username,omitempty"`
+	Password string `json:"password,omitempty"`
+	Email    string `json:"email,omitempty"`
 }

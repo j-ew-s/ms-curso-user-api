@@ -1,9 +1,11 @@
 package database
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
+
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 type SQLCommand struct {
@@ -12,12 +14,18 @@ type SQLCommand struct {
 
 func (sqlCommand SQLCommand) Ping() error {
 
-	db, err := sql.Open(sqlCommand.SqlConn.Driver, sqlCommand.SqlConn.DataSource)
+	db, err := gorm.Open(mysql.Open(sqlCommand.SqlConn.DataSource), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = db.Ping()
+	sqlDb, err := db.DB()
+	if err != nil {
+		fmt.Println("FAIL TO DEFINE DB!")
+		return err
+	}
+
+	err = sqlDb.Ping()
 	if err != nil {
 		fmt.Println("FAIL TO CONNECT TO SQL SERVER!")
 		return err
@@ -27,20 +35,15 @@ func (sqlCommand SQLCommand) Ping() error {
 	return nil
 }
 
-func (sqlCommand SQLCommand) ExecuteSQLCommand(command string) {
+func (sqlCommand SQLCommand) ExecuteSQLCommand() (*gorm.DB, error) {
 
-	db, err := sql.Open(sqlCommand.SqlConn.Driver, sqlCommand.SqlConn.DataSource)
+	db, err := gorm.Open(mysql.Open(sqlCommand.SqlConn.DataSource), &gorm.Config{})
 
 	if err != nil {
-		panic(err.Error())
+		fmt.Println("Error connecting to database : error=%v", err)
+		return nil, err
 	}
 
-	defer db.Close()
+	return db, nil
 
-	query, err := db.Query(command)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	defer query.Close()
 }

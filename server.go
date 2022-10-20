@@ -11,9 +11,14 @@ import (
 )
 
 func main() {
+
 	router := fasthttprouter.New()
-	userServices.SetRoutes(router)
-	SetDataBase()
+
+	sqlCommand := SetDataBase()
+
+	client := userServices.CatalogServiceMain(sqlCommand)
+	userServices.SetRoutes(router, client)
+
 	fasthttp.ListenAndServe(":5100", CORS(router.Handler))
 }
 
@@ -36,9 +41,9 @@ func CORS(next fasthttp.RequestHandler) fasthttp.RequestHandler {
 	}
 }
 
-func SetDataBase() {
+func SetDataBase() *database.SQLCommand {
 
-	conn := database.SetDrivers("mysql", "")
+	conn := database.SetDrivers("mysql", "user_management")
 
 	sqlCommand := &database.SQLCommand{
 		SqlConn: conn,
@@ -49,5 +54,7 @@ func SetDataBase() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	return sqlCommand
 
 }

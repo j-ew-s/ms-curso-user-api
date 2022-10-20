@@ -33,7 +33,7 @@ func (ls LoginServices) Login(ctx *fasthttp.RequestCtx) {
 	}
 
 	if result.Id > 0 {
-		login, err := ls.RegisterLogin(result)
+		login, err := ls.registerLogin(result)
 		if err != nil {
 			fmt.Println(fmt.Printf(" Insert Error  :::  %+v ::", err))
 			common.PrepareResponse(ctx, 500, nil)
@@ -48,7 +48,7 @@ func (ls LoginServices) Login(ctx *fasthttp.RequestCtx) {
 	common.PrepareResponse(ctx, 401, nil)
 }
 
-func (ls LoginServices) RegisterLogin(user userModels.User) (*loginModels.RegisterLoging, error) {
+func (ls LoginServices) registerLogin(user userModels.User) (*loginModels.RegisterLoging, error) {
 
 	login := &loginModels.RegisterLoging{
 		Username:   user.Username,

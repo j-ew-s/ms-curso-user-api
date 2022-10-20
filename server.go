@@ -6,6 +6,7 @@ import (
 	"github.com/buaazp/fasthttprouter"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/j-ew-s/ms-curso-user-api/database"
+	loginServices "github.com/j-ew-s/ms-curso-user-api/login-services"
 	userServices "github.com/j-ew-s/ms-curso-user-api/user-services"
 	"github.com/valyala/fasthttp"
 )
@@ -16,8 +17,11 @@ func main() {
 
 	sqlCommand := SetDataBase()
 
-	client := userServices.CatalogServiceMain(sqlCommand)
-	userServices.SetRoutes(router, client)
+	clientUser := userServices.UserServiceMain(sqlCommand)
+	userServices.SetRoutes(router, clientUser)
+
+	clientLogin := loginServices.LoginserviceMain(sqlCommand)
+	loginServices.SetRoutes(router, clientLogin)
 
 	fasthttp.ListenAndServe(":5100", CORS(router.Handler))
 }

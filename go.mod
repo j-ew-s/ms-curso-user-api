@@ -6,6 +6,7 @@ require (
 	github.com/buaazp/fasthttprouter v0.1.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/protobuf v1.5.2
+	github.com/google/uuid v1.1.2
 	github.com/valyala/fasthttp v1.37.0
 	google.golang.org/grpc v1.50.1
 	gorm.io/driver/mysql v1.4.3

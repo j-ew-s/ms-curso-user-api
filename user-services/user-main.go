@@ -11,7 +11,7 @@ type Server struct {
 	*api.UserServices
 }
 
-func CatalogServiceMain(conn *database.SQLCommand) *api.UserServices {
+func UserServiceMain(conn *database.SQLCommand) *api.UserServices {
 	userServices := &api.UserServices{
 		DBConn: conn,
 	}
@@ -25,6 +25,4 @@ func SetRoutes(router *fasthttprouter.Router, client *api.UserServices) {
 	router.DELETE("/:id", client.Delete)
 	router.GET("/", client.GetAll)
 	router.GET("/:id", client.Detail)
-	router.POST("/login", client.Login)
-	router.POST("/logout", client.Logout)
 }

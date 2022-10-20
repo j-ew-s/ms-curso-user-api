@@ -94,11 +94,3 @@ func (us UserServices) GetAll(ctx *fasthttp.RequestCtx) {
 
 	common.PrepareResponse(ctx, statusCode, results)
 }
-
-func (us UserServices) Login(ctx *fasthttp.RequestCtx) {
-	fmt.Println("Login")
-}
-
-func (us UserServices) Logout(ctx *fasthttp.RequestCtx) {
-	fmt.Println("Logout")
-}

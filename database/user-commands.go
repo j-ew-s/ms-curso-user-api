@@ -8,7 +8,7 @@ import (
 
 func (sqlCommand SQLCommand) InsertUser(user userModel.User) (userModel.User, error) {
 
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return user, err
@@ -21,7 +21,7 @@ func (sqlCommand SQLCommand) InsertUser(user userModel.User) (userModel.User, er
 
 func (sqlCommand SQLCommand) UpdatedUser(user *userModel.User) (userModel.User, error) {
 
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return *user, nil
@@ -33,7 +33,7 @@ func (sqlCommand SQLCommand) UpdatedUser(user *userModel.User) (userModel.User, 
 }
 
 func (sqlCommand SQLCommand) DeleteUser(id string) error {
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return err
@@ -47,7 +47,7 @@ func (sqlCommand SQLCommand) DeleteUser(id string) error {
 func (sqlCommand SQLCommand) GetAllUsers() ([]*userModel.User, error) {
 	users := make([]*userModel.User, 0)
 
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return users, err
@@ -58,7 +58,7 @@ func (sqlCommand SQLCommand) GetAllUsers() ([]*userModel.User, error) {
 }
 
 func (sqlCommand SQLCommand) GetUserByIDS(id string) (user userModel.User, err error) {
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return user, err

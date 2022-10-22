@@ -10,7 +10,7 @@ import (
 func (sqlCommand SQLCommand) ValidateLogin(login loginModels.Login) (userModel.User, error) {
 
 	user := &userModel.User{}
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return *user, err
@@ -27,7 +27,7 @@ func (sqlCommand SQLCommand) ValidateLogin(login loginModels.Login) (userModel.U
 
 func (sqlCommand SQLCommand) Login(login *loginModels.RegisterLoging) error {
 
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return err
@@ -40,7 +40,7 @@ func (sqlCommand SQLCommand) Login(login *loginModels.RegisterLoging) error {
 
 func (sqlCommand SQLCommand) Logout(input *loginModels.Logout) error {
 
-	db, err := sqlCommand.ExecuteSQLCommand()
+	db, err := sqlCommand.OpenConnection()
 	if err != nil {
 		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
 		return err
@@ -49,4 +49,23 @@ func (sqlCommand SQLCommand) Logout(input *loginModels.Logout) error {
 	db.Table("login").Delete(&logout, input)
 
 	return nil
+}
+
+func (sqlCommand SQLCommand) IsTokenValid(input string) (*loginModels.Login, error) {
+
+	login := loginModels.Login{}
+
+	db, err := sqlCommand.OpenConnection()
+	if err != nil {
+		fmt.Println(fmt.Printf(" ERROR :::  %+v ::", err))
+		return &login, err
+	}
+
+	err = db.Table("login").
+		Select("*").
+		Where("token = ? and login_limit > NOW()", input).
+		Scan(&login).
+		Error
+
+	return &login, err
 }

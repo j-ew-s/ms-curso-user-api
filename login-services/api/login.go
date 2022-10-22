@@ -83,3 +83,18 @@ func (ls LoginServices) Logout(ctx *fasthttp.RequestCtx) {
 
 	common.PrepareResponse(ctx, 200, nil)
 }
+
+func (ls LoginServices) IsTokenValid(token string) (bool, error) {
+
+	loginModel, err := ls.DBConn.IsTokenValid(token)
+	if err != nil {
+		fmt.Println(fmt.Printf(" Insert Error  :::  %+v ::", err))
+		return false, err
+	}
+
+	if len(loginModel.Username) > 0 {
+		return true, nil
+	}
+
+	return false, nil
+}

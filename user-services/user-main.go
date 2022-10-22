@@ -2,8 +2,9 @@ package userServices
 
 import (
 	"github.com/buaazp/fasthttprouter"
-
+	authServices "github.com/j-ew-s/ms-curso-user-api/auth-services"
 	"github.com/j-ew-s/ms-curso-user-api/database"
+	loginApi "github.com/j-ew-s/ms-curso-user-api/login-services/api"
 	"github.com/j-ew-s/ms-curso-user-api/user-services/api"
 )
 
@@ -19,10 +20,10 @@ func UserServiceMain(conn *database.SQLCommand) *api.UserServices {
 	return userServices
 }
 
-func SetRoutes(router *fasthttprouter.Router, client *api.UserServices) {
-	router.POST("/", client.Create)
-	router.PUT("/:id", client.Update)
-	router.DELETE("/:id", client.Delete)
-	router.GET("/", client.GetAll)
-	router.GET("/:id", client.Detail)
+func SetRoutes(router *fasthttprouter.Router, client *api.UserServices, loginClient *loginApi.LoginServices) {
+	router.POST("/", authServices.AuthSessionValidator(client.Create, loginClient))
+	router.PUT("/:id", authServices.AuthSessionValidator(client.Update, loginClient))
+	router.DELETE("/:id", authServices.AuthSessionValidator(client.Delete, loginClient))
+	router.GET("/", authServices.AuthSessionValidator(client.GetAll, loginClient))
+	router.GET("/:id", authServices.AuthSessionValidator(client.Detail, loginClient))
 }

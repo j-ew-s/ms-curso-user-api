@@ -16,12 +16,11 @@ func main() {
 	router := fasthttprouter.New()
 
 	sqlCommand := SetDataBase()
-
-	clientUser := userServices.UserServiceMain(sqlCommand)
-	userServices.SetRoutes(router, clientUser)
-
 	clientLogin := loginServices.LoginserviceMain(sqlCommand)
 	loginServices.SetRoutes(router, clientLogin)
+
+	clientUser := userServices.UserServiceMain(sqlCommand)
+	userServices.SetRoutes(router, clientUser, clientLogin)
 
 	fasthttp.ListenAndServe(":5100", CORS(router.Handler))
 }

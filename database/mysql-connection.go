@@ -35,7 +35,7 @@ func (sqlCommand SQLCommand) Ping() error {
 	return nil
 }
 
-func (sqlCommand SQLCommand) ExecuteSQLCommand() (*gorm.DB, error) {
+func (sqlCommand SQLCommand) OpenConnection() (*gorm.DB, error) {
 
 	db, err := gorm.Open(mysql.Open(sqlCommand.SqlConn.DataSource), &gorm.Config{})
 
